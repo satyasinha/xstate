@@ -1,5 +1,11 @@
 # xstate
 
+## 4.28.2
+
+### Patch Changes
+
+- [#2957](https://github.com/statelyai/xstate/pull/2957) [`8550ddda7`](https://github.com/statelyai/xstate/commit/8550ddda73e2ad291e19173d7fa8d13e3336fbb9) Thanks [@davidkpiano](https://github.com/davidkpiano)! - The repository links have been updated from `github.com/davidkpiano` to `github.com/statelyai`.
+
 ## 4.28.1
 
 ### Patch Changes
@@ -185,10 +191,10 @@
 
   model.createMachine({
     // `ctx` was of type `any`
-    entry: (ctx) => {},
+    entry: ctx => {},
     exit: assign({
       // `ctx` was of type `unknown`
-      foo: (ctx) => 42
+      foo: ctx => 42
     })
   });
   ```
@@ -364,11 +370,11 @@
   const machine = createMachine({
     context: { count: 0 },
     entry: [
-      (ctx) => console.log(ctx.count), // 0
-      assign({ count: (ctx) => ctx.count + 1 }),
-      (ctx) => console.log(ctx.count), // 1
-      assign({ count: (ctx) => ctx.count + 1 }),
-      (ctx) => console.log(ctx.count) // 2
+      ctx => console.log(ctx.count), // 0
+      assign({ count: ctx => ctx.count + 1 }),
+      ctx => console.log(ctx.count), // 1
+      assign({ count: ctx => ctx.count + 1 }),
+      ctx => console.log(ctx.count) // 2
     ],
     preserveActionOrder: true
   });
@@ -377,11 +383,11 @@
   const machine = createMachine({
     context: { count: 0 },
     entry: [
-      (ctx) => console.log(ctx.count), // 2
-      assign({ count: (ctx) => ctx.count + 1 }),
-      (ctx) => console.log(ctx.count), // 2
-      assign({ count: (ctx) => ctx.count + 1 }),
-      (ctx) => console.log(ctx.count) // 2
+      ctx => console.log(ctx.count), // 2
+      assign({ count: ctx => ctx.count + 1 }),
+      ctx => console.log(ctx.count), // 2
+      assign({ count: ctx => ctx.count + 1 }),
+      ctx => console.log(ctx.count) // 2
     ]
     // preserveActionOrder: false
   });
@@ -580,7 +586,7 @@
   });
 
   const service = interpret(machine)
-    .onTransition((state) => {
+    .onTransition(state => {
       // Read promise value synchronously
       const resolvedValue = state.context.promiseRef?.getSnapshot();
       // => undefined (if promise not resolved yet)
@@ -660,7 +666,7 @@
     context: { value: 42 },
     on: {
       INC: {
-        actions: assign({ value: (ctx) => ctx.value + 1 })
+        actions: assign({ value: ctx => ctx.value + 1 })
       }
     }
   });
@@ -920,7 +926,7 @@
 
   ```js
   // ...
-  actions: stop((context) => context.someActor);
+  actions: stop(context => context.someActor);
   ```
 
 ### Patch Changes
@@ -1158,10 +1164,10 @@
   ```js
   entry: [
     choose([
-      { cond: (ctx) => ctx > 100, actions: raise('TOGGLE') },
+      { cond: ctx => ctx > 100, actions: raise('TOGGLE') },
       {
         cond: 'hasMagicBottle',
-        actions: [assign((ctx) => ({ counter: ctx.counter + 1 }))]
+        actions: [assign(ctx => ({ counter: ctx.counter + 1 }))]
       },
       { actions: ['fallbackAction'] }
     ])
